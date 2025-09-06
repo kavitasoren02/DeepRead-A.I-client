@@ -9,6 +9,10 @@ import Loader from "../../components/ui/chatloader";
 
 import gptIcon from "../../assets/Vector.svg";
 import starIcon from "../../assets/star.svg";
+import { useParams } from "react-router-dom";
+import { _get } from "../../Service/ApiService";
+import { GET_HISTORY } from "../../Service/useApiService";
+import type { ChatHistory } from "../../Service/interface";
 
 interface ChatMessage {
   userMessage: string;
@@ -20,10 +24,33 @@ const Chat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { id } = useParams();
+  const [updateHistory, setUpdateHistory] = useState<number>(0)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if(id){
+      (async () => {
+        try{
+          setUpdateHistory(0)
+          const { data } = await _get<ChatHistory[]>(`${GET_HISTORY}/${id}`);
+          setMessages(data.map(item => {
+            return {
+              userMessage: item.isAIgenerated ? '' : item.message,
+              botSummary: item.isAIgenerated ? item.message : '',
+              isLoading: false
+            }
+          }))
+        } 
+        catch (error: any) {
+          // do nothing
+        }  
+      })()
+    }
+  }, [id])
 
   const handleSendMessage = (userMessage: string, botSummary?: string) => {
     setMessages((prev) => {
@@ -47,7 +74,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-row overflow-hidden relative bg-gray-100">
+    <div className="h-screen w-screen flex flex-row overflow-hidden relative bg-gray-100">
       {/* Mobile menu button */}
       {!isOpen && (
         <div
@@ -59,10 +86,14 @@ const Chat = () => {
       )}
 
       {/* Sidebar */}
-      <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Sidebar 
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen}
+        updateHistory={updateHistory} 
+      />
 
       {/* Main Chat Area */}
-      <div className="flex-1 h-full z-10 flex flex-col">
+      <div className="flex-1 h-full w-full z-10 flex flex-col">
         {/* Messages Section */}
         <div className="flex-1 overflow-y-auto px-4 pt-4">
           {messages.length === 0 ? (
@@ -83,10 +114,10 @@ const Chat = () => {
               ]}
             />
           ) : (
-            <div className="space-y-4 lg:ml-[50px] lg:mt-[20px]">
+            <div className="space-y-4 lg:pl-[50px] lg:pt-[20px]">
               {messages.map((msg, index) => (
                 <div key={index} className="flex flex-col gap-2">
-                  <SenderMessage message={msg.userMessage} />
+                  {msg.userMessage && <SenderMessage message={msg.userMessage} />}
                   {msg.isLoading ? (
                     <div className="flex justify-start items-center gap-2">
                       <Loader />
@@ -103,7 +134,11 @@ const Chat = () => {
 
         {/* Input Section */}
         <div className="px-4 py-4 flex justify-center">
-          <ChatInput onSendMessage={handleSendMessage} />
+          <ChatInput 
+            onSendMessage={handleSendMessage}
+            updateHistory={updateHistory}
+            setUpdateHistory={setUpdateHistory} 
+          />
         </div>
       </div>
     </div>

@@ -114,3 +114,27 @@ export interface InitialChatProps {
     onClick: () => void;
   }[];
 }
+
+export interface GroupedHistory {
+  _id?: string;
+  sessionId: string;
+  userId: string;
+  message: string;
+  isAIgenerated: boolean;
+  audioPath: string;
+  timeStamp: string;
+} 
+
+export interface GroupedHistoryResponse {
+  chat: GroupedHistory;
+  sessionId: string;
+}
+
+export interface ChatHistory {
+  sessionId: string;
+  userId: string;
+  message: string;
+  isAIgenerated: boolean;
+  audioPath?: string;
+  timeStamp: string;
+}
