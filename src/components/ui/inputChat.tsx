@@ -16,10 +16,10 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
   const { id: session_Id } = useParams<{ id: string }>();
 
   const handleSend = async () => {
-    if (!message.trim()) return;
+    if (!message.trim()) return; // prevent empty message
 
-    const currentMessage = message;
-    setMessage(""); 
+    const currentMessage = message.trim();
+    setMessage(""); // Clear input immediately
 
     onSendMessage(currentMessage);
 
@@ -34,8 +34,8 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
         prompt: currentMessage,
       });
 
-      // Update last message with bot response
-      onSendMessage(currentMessage, data.summary);
+      onSendMessage("",data.message);
+
     } catch (error) {
       toast.error("Error during sending message");
       console.error(error);
@@ -55,12 +55,14 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
           type="text"
           placeholder="Send a message"
         />
-        
+
+        {/* Send Button */}
         <span
-          onClick={handleSend}
-          className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-xl cursor-pointer ${message.trim() ? " text-gray-300 cursor-not-allowed" : "text-[#8C8C8C]"}`}
+          onClick={() => message.trim() && handleSend()}
+          className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold text-xl cursor-pointer 
+            ${!message.trim() ? "text-gray-300 cursor-not-allowed" : "text-[#8C8C8C]"}`}
         >
-          <RiSendPlane2Fill className="h-[25px] w-[25px] " />
+          <RiSendPlane2Fill className="h-[25px] w-[25px]" />
         </span>
       </div>
 

@@ -1,6 +1,6 @@
 const Loader = () => {
   return (
-    <div className="flex space-x-1">
+    <div className="flex space-x-1 lg:mt-[100px]">
       <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
       <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></span>
       <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-300"></span>

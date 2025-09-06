@@ -30,17 +30,22 @@ const Chat = () => {
 
       const updated = [...prev];
       const lastIndex = updated.length - 1;
-      updated[lastIndex] = {
-        ...updated[lastIndex],
-        botSummary,
-        isLoading: false,
-      };
+
+      if (lastIndex >= 0) {
+        updated[lastIndex] = {
+          ...updated[lastIndex],
+          botSummary,
+          isLoading: false,
+        };
+      }
+
       return updated;
     });
   };
 
   return (
     <div className="h-screen w-full flex flex-row overflow-hidden relative bg-gray-100">
+      {/* Mobile menu button */}
       {!isOpen && (
         <div
           className="absolute top-4 left-4 md:hidden cursor-pointer bg-gray-800 p-2 rounded-md z-50"
@@ -60,10 +65,9 @@ const Chat = () => {
           {messages.length === 0 ? (
             <InitialChat />
           ) : (
-            <div className="space-y-4 lg:ml-[50px] lg:mt-[20px]">
+            <div className="space-y-4 lg:ml-[50px] lg:mt-[20px] ">
               {messages.map((msg, index) => (
                 <div key={index} className="flex flex-col gap-2">
-                  {/* Sender Message */}
                   <SenderMessage message={msg.userMessage} />
 
                   {msg.isLoading ? (
@@ -71,9 +75,7 @@ const Chat = () => {
                       <Loader />
                     </div>
                   ) : (
-                    msg.botSummary && (
-                      <ReceiverMessage message={msg.botSummary} />
-                    )
+                    msg.botSummary && <ReceiverMessage message={msg.botSummary} />
                   )}
                 </div>
               ))}
@@ -83,7 +85,7 @@ const Chat = () => {
         </div>
 
         {/* Input Section */}
-        <div className=" px-4 py-4 flex justify-center">
+        <div className="px-4 py-4 flex justify-center">
           <ChatInput onSendMessage={handleSendMessage} />
         </div>
       </div>
