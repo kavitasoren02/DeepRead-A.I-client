@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         const { data } = await _get<GroupedHistoryResponse[]>(GROUPED_HOSTORY);
         setHistory(data);
       } catch (error: any) {
-        // Do nothing
+        // Do nothing for now
       }
     })();
   }, [updateHistory]);
@@ -38,7 +38,13 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div
       className={`bg-[#202028] h-full fixed md:relative transition-all duration-300 z-20
-        ${isOpen ? "w-[75%] md:w-[35%] lg:w-[25%]" : "w-[70px]"}`}
+        ${
+          isOpen
+            ? "w-[75%] md:w-[35%] lg:w-[25%]" // Open state
+            : "w-[75%] md:w-[70px]" // Closed state: 70px only for desktop
+        }
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+      `}
     >
       <div className="p-4 h-[calc(100%-12px)] relative flex flex-col justify-between gap-3">
         {/* LEFT-TOP */}
@@ -62,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <img src={SideBar} alt="sidebar" className="h-[18px] w-[18px]" />
           </div>
 
-          {/* Close Icon*/}
+          {/* Close Icon (Visible only on mobile) */}
           {isOpen && (
             <div
               className="md:hidden flex justify-center items-center h-[40px] w-[40px] border-2 border-gray-500 rounded-md cursor-pointer"
@@ -92,9 +98,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         {/* LEFT-BOTTOM */}
         <div className="w-full text-white md:mt-0 flex flex-col gap-4">
-          {/* Upgrade Section */}
+          {/* Upgrade Section with Tooltip */}
           {isOpen && (
-            <div className="w-full flex items-center justify-between text-white lg:text-lg text-sm font-semibold cursor-pointer rounded-md py-2 hover:bg-gray-700">
+            <div className="relative group w-full flex items-center justify-between text-white lg:text-lg text-sm font-semibold cursor-pointer rounded-md py-2 hover:bg-gray-700">
               <div className="flex items-center gap-2 lg:gap-4">
                 <img
                   className="h-[35px] w-[35px] lg:h-[50px] lg:w-[50px]"
@@ -104,17 +110,25 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <span>Upgrade to Plus</span>
               </div>
 
-              <img
-                className="h-[20px] w-[40px] md:h-[27px] md:w-[47px] mr-[5px]"
-                src={newBadge}
-                alt="newBadge"
-              />
+              {/* Badge with hover tooltip */}
+              <div className="relative">
+                <img
+                  className="h-[20px] w-[40px] md:h-[27px] md:w-[47px] mr-[5px]"
+                  src={newBadge}
+                  alt="newBadge"
+                />
+                {/* Tooltip on hover */}
+                <div className="absolute right-0 top-[-35px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg">
+                  Sidebar
+                </div>
+              </div>
             </div>
           )}
 
           {/* Profile Section (Always Visible) */}
           <div className="flex items-center justify-between w-full cursor-pointer rounded-md hover:bg-gray-700">
             <div className="flex items-center gap-4">
+              {/* Profile avatar */}
               <div className="h-[35px] w-[35px] lg:h-[50px] lg:w-[50px] rounded-full border border-gray-500 bg-gray-700 flex items-center justify-center text-white text-lg font-bold">
                 {user?.first_name
                   ? user.first_name.charAt(0).toUpperCase()
