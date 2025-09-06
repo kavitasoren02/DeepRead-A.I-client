@@ -98,3 +98,19 @@ export interface ChatResponseProps {
   message: string;
   summary: string;
 }
+
+export interface ButtonProps {
+  active: boolean;
+  onClick: () => void;
+ children: ReactNode;
+
+}
+
+export interface InitialChatProps {
+  buttons?: {
+    label: string;
+    icon?: string;
+    active: boolean;
+    onClick: () => void;
+  }[];
+}

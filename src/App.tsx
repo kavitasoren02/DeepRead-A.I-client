@@ -4,7 +4,7 @@ import Home from "./pages/home/home";
 import RegistrationForm from "./pages/signup/Signup";
 import LoginForm from "./pages/login/Login";
 import UploadFile from "./pages/upload/Upload";
-import ChatScreen from './pages/chat/Chat1';
+import ChatScreen from './pages/chat/Chat';
 import { Route, Routes } from "react-router-dom";
 
 function App() {
