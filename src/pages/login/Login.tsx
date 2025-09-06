@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import type { LoginResponse } from "../../Service/interface";
 import { LOGIN } from "../../Service/useApiService";
@@ -12,6 +12,7 @@ import googleIcon from "../../assets/Icon_Google.svg";
 
 const Login: React.FC = () => {
   const [loading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -33,8 +34,8 @@ const Login: React.FC = () => {
       setIsLoading(true);
       try {
         const { data } = await _post<LoginResponse>(LOGIN, values);
-        // console.log({data});
         toast.success(data.msg);
+        navigate("/upload");
       } catch (error: any) {
         toast.error(error?.response?.data?.message || "Login failed");
       } finally {

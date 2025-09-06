@@ -11,9 +11,9 @@ const InitialChat = ({ buttons }: InitialChatProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full px-4 sm:px-6 lg:px-0">
       {/* Buttons container */}
-      <div className="flex flex-row w-[200px] md:w-[200px] lg:w-[350px] h-[60px] lg:h-[100px] mt-[100px] md:mt-[40px] bg-gray-100 rounded-xl items-center justify-between px-2 lg:px-6">
+      <div className="flex flex-row w-full max-w-[350px] sm:max-w-[400px] lg:max-w-[500px] h-14 sm:h-16 lg:h-24 mt-20 sm:mt-16 lg:mt-24 bg-gray-100 rounded-xl items-center justify-center gap-x-2 sm:gap-x-3 lg:gap-x-4 px-2 sm:px-4 lg:px-6">
         {buttons?.map((btn, index) => (
           <Button
             key={index}
@@ -24,17 +24,19 @@ const InitialChat = ({ buttons }: InitialChatProps) => {
               <img
                 src={btn.icon}
                 alt={btn.label}
-                className="h-5 w-5 lg:h-8 lg:w-8"
+                className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8"
               />
             )}
-            <p className="text-md lg:text-lg font-semibold">{btn.label}</p>
+            <p className="text-xs sm:text-sm lg:text-lg font-semibold">
+              {btn.label}
+            </p>
           </Button>
         ))}
       </div>
 
       {/* DeepRead-A.I. */}
-      <div className="mt-[20px] lg:mt-[50px]">
-        <p className="text-[40px] lg:text-[60px] font-bold text-gray-300 mb-[200px] lg:mb-[500px]">
+      <div className="mt-6 sm:mt-10 lg:mt-16">
+        <p className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-300 text-center mb-32 sm:mb-48 lg:mb-72">
           DeepRead-A.I.
         </p>
       </div>
