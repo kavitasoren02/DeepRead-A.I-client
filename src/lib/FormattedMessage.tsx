@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 
 interface FormattedMessageProps {
   content: string;
@@ -7,7 +7,44 @@ interface FormattedMessageProps {
 export default function FormattedMessage({ content }: FormattedMessageProps) {
   // Parse and format the message content
   const formatMessage = (text: string) => {
-    // Split by double newlines to create paragraphs/sections
+    // Handle fenced code blocks first (```lang ... ```)
+    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = codeBlockRegex.exec(text)) !== null) {
+      const [full, lang, code] = match;
+      const start = match.index;
+
+      // Text before the code block
+      if (start > lastIndex) {
+        parts.push(renderSections(text.slice(lastIndex, start)));
+      }
+
+      // The code block itself
+      parts.push(
+        <pre
+          key={`codeblock-${start}`}
+          className="bg-gray-900 text-gray-100 p-3 rounded-md overflow-x-auto my-3 text-sm"
+        >
+          <code className={`language-${lang || "text"}`}>{code.trim()}</code>
+        </pre>
+      );
+
+      lastIndex = start + full.length;
+    }
+
+    // Remaining text after last code block
+    if (lastIndex < text.length) {
+      parts.push(renderSections(text.slice(lastIndex)));
+    }
+
+    return parts;
+  };
+
+  // Render normal sections (your previous logic)
+  const renderSections = (text: string) => {
     const sections = text.split("\n\n");
 
     return sections.map((section, sectionIndex) => {
@@ -18,7 +55,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
         const trimmedLine = line.trim();
         if (!trimmedLine) return;
 
-        // Handle horizontal rules (--- or ***)
+        // Horizontal rules
         if (/^(-{3,}|\*{3,})$/.test(trimmedLine)) {
           elements.push(
             <hr
@@ -27,31 +64,33 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             />
           );
         }
-        // Handle markdown headers (#, ##, ###)
+        // Markdown headers (#, ##, ###)
         else if (/^#{1,6}\s+/.test(trimmedLine)) {
           const headerLevel = trimmedLine.match(/^#+/)?.[0].length ?? 1;
           const headerText = trimmedLine.replace(/^#+\s*/, "");
-        
-          // ✅ Cast to React.ElementType instead of string
-          const HeaderTag = (`h${Math.min(headerLevel, 6)}` as keyof React.JSX.IntrinsicElements) as React.ElementType;
-        
+          const tag = `h${Math.min(
+            headerLevel,
+            6
+          )}` as keyof React.JSX.IntrinsicElements;
+
           elements.push(
-            <HeaderTag
-              key={`header-md-${sectionIndex}-${lineIndex}`}
-              className={`font-bold mb-2 mt-4 first:mt-0 ${
-                headerLevel === 1
-                  ? "text-2xl"
-                  : headerLevel === 2
-                  ? "text-xl"
-                  : "text-lg"
-              }`}
-            >
-              {formatInlineText(headerText)}
-            </HeaderTag>
+            React.createElement(
+              tag,
+              {
+                key: `header-md-${sectionIndex}-${lineIndex}`,
+                className: `font-bold mb-2 mt-4 first:mt-0 ${
+                  headerLevel === 1
+                    ? "text-2xl"
+                    : headerLevel === 2
+                    ? "text-xl"
+                    : "text-lg"
+                }`,
+              },
+              formatInlineText(headerText)
+            )
           );
         }
-        
-        // Handle headers ending with colon and wrapped in **
+        // Headers ending with colon and wrapped in **
         else if (/^\*\*.*:\*\*$/.test(trimmedLine)) {
           const headerText = trimmedLine.replace(/^\*\*|\*\*$/g, "");
           elements.push(
@@ -63,7 +102,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             </h3>
           );
         }
-        // Handle bold section headers (**text**)
+        // Bold section headers (**text**)
         else if (/^\*\*.*\*\*$/.test(trimmedLine)) {
           const headerText = trimmedLine.replace(/^\*\*|\*\*$/g, "");
           elements.push(
@@ -75,7 +114,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             </h4>
           );
         }
-        // Handle numbered lists (1., 2., etc.)
+        // Numbered lists
         else if (/^\d+\.\s+/.test(trimmedLine)) {
           const listText = trimmedLine.replace(/^\d+\.\s+/, "");
           elements.push(
@@ -92,7 +131,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             </div>
           );
         }
-        // Handle bullet points (*, -, •)
+        // Bullet points
         else if (/^[*\-•]\s+/.test(trimmedLine)) {
           const bulletText = trimmedLine.replace(/^[*\-•]\s+/, "");
           elements.push(
@@ -109,7 +148,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             </div>
           );
         }
-        // Handle sub-bullets (indented with spaces)
+        // Sub-bullets
         else if (/^\s{2,}[*\-•]\s+/.test(trimmedLine)) {
           const subBulletText = trimmedLine.replace(/^\s*[*\-•]\s+/, "");
           elements.push(
@@ -126,7 +165,7 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
             </div>
           );
         }
-        // Handle normal paragraph
+        // Normal paragraph
         else {
           elements.push(
             <p
@@ -147,29 +186,24 @@ export default function FormattedMessage({ content }: FormattedMessageProps) {
     });
   };
 
-  // Format inline text (bold, italic, code)
+  // Inline text (bold, italic, code)
   const formatInlineText = (text: string) => {
     const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
 
     return parts.map((part, index) => {
-      // Bold
       if (/^\*\*.*\*\*$/.test(part)) {
         return (
           <strong key={index} className="font-semibold text-gray-900">
             {part.replace(/^\*\*|\*\*$/g, "")}
           </strong>
         );
-      }
-      // Italic
-      else if (/^\*.*\*$/.test(part)) {
+      } else if (/^\*.*\*$/.test(part)) {
         return (
           <em key={index} className="italic">
             {part.replace(/^\*|\*$/g, "")}
           </em>
         );
-      }
-      // Inline code
-      else if (/^`.*`$/.test(part)) {
+      } else if (/^`.*`$/.test(part)) {
         return (
           <code
             key={index}

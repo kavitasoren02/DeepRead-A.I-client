@@ -114,7 +114,7 @@ const Chat = () => {
               ]}
             />
           ) : (
-            <div className="space-y-4 lg:pl-[50px] lg:pt-[20px]">
+            <div className="space-y-4 lg:pt-[20px]">
               {messages.map((msg, index) => (
                 <div key={index} className="flex flex-col gap-2">
                   {msg.userMessage && <SenderMessage message={msg.userMessage} />}
