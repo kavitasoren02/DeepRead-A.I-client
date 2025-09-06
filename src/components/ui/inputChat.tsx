@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, type SetStateAction } from "react";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import micIcon from "../../assets/mic.svg";
 import { toast } from "react-toastify";
@@ -9,9 +9,11 @@ import { CHATSUMMARY } from "../../Service/useApiService";
 
 interface ChatInputProps {
   onSendMessage: (userMessage: string, botSummary?: string) => void;
+  updateHistory: number;
+  setUpdateHistory: React.Dispatch<SetStateAction<number>>;
 }
 
-const ChatInput = ({ onSendMessage }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, updateHistory, setUpdateHistory }: ChatInputProps) => {
   const [message, setMessage] = useState("");
   const { id: session_Id } = useParams<{ id: string }>();
 
@@ -35,7 +37,9 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
       });
 
       onSendMessage("",data.message);
-
+      if(updateHistory === 0){
+        setUpdateHistory(prev => prev + 1);
+      }
     } catch (error) {
       toast.error("Error during sending message");
       console.error(error);
