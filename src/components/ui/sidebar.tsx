@@ -15,90 +15,104 @@ interface SidebarProps {
   updateHistory: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, updateHistory }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  setIsOpen,
+  updateHistory,
+}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [history, setHistory] = useState<GroupedHistoryResponse[]>([])
+  const [history, setHistory] = useState<GroupedHistoryResponse[]>([]);
 
   useEffect(() => {
-    (async() => {
-      try{
+    (async () => {
+      try {
         const { data } = await _get<GroupedHistoryResponse[]>(GROUPED_HOSTORY);
-        setHistory(data)
-      }
-      catch (error: any){
+        setHistory(data);
+      } catch (error: any) {
         // Do nothing
       }
-    })()
-  }, [updateHistory])
-  
+    })();
+  }, [updateHistory]);
+
   return (
     <div
-      className={`bg-[#202028] w-[75%] md:w-[35%] lg:w-[25%] h-full fixed md:relative transition-transform duration-300 z-20
-      ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+      className={`bg-[#202028] h-full fixed md:relative transition-all duration-300 z-20
+        ${isOpen ? "w-[75%] md:w-[35%] lg:w-[25%]" : "w-[70px]"}`}
     >
       <div className="p-4 h-[calc(100%-12px)] relative flex flex-col justify-between gap-3">
+        {/* LEFT-TOP */}
+        <div className="w-full h-[40px] flex flex-row justify-between gap-2 mt-2">
+          {/* New Chat Button*/}
+          {isOpen && (
+            <div
+              onClick={() => navigate("/upload")}
+              className="flex-1 border-2 border-gray-500 text-white text-xl flex items-center gap-2 pl-2 cursor-pointer rounded-md"
+            >
+              <span className="lg:text-3xl text-xl">+</span>
+              <span className="lg:text-xl text-md">New Chat</span>
+            </div>
+          )}
 
-        {/* LEFT-TOP*/}
-        <div className="w-full h-[40px] flex flex-row justify-between lg:gap-2 gap-2 mt-2 md:w-full">
-          {/* New Chat Button */}
+          {/* Collapse Button */}
           <div
-            onClick={() => navigate("/upload")}
-            className="w-[80%] md:w-full lg:w-[100%] border-2 border-gray-500 text-white text-xl flex items-center gap-2 pl-2 cursor-pointer rounded-md"
+            onClick={() => setIsOpen(!isOpen)}
+            className="h-[40px] w-[40px] border-2 border-gray-500 flex justify-center items-center rounded-md cursor-pointer"
           >
-            <span className="lg:text-3xl text-xl">+</span>
-            <span className="lg:text-xl text-md">New Chat</span>
-          </div>
-
-          <div className="w-[20%] border-2 border-gray-500 flex justify-center items-center rounded-md cursor-pointer">
             <img src={SideBar} alt="sidebar" className="h-[18px] w-[18px]" />
           </div>
 
           {/* Close Icon*/}
-          <div
-            className="md:hidden flex justify-center items-center h-[40px] w-[40px] border-2 border-gray-500 rounded-md cursor-pointer"
-            onClick={() => setIsOpen(false)}
-          >
-            <HiOutlineX className="h-6 w-6 items-center text-white" />
-          </div>
-        </div>
-        <div className="h-full flex flex-col gap-1 overflow-auto">
-          {
-            history.map(item => {
-              return (
-                <Link 
-                  to={`/chat/${item.sessionId}`}
-                  className="text-white p-2 border border-gray-500 w-full block rounded-md hover:bg-gray-500"
-                >
-                  {item.chat.message}
-                </Link>
-              )
-            })
-          }
+          {isOpen && (
+            <div
+              className="md:hidden flex justify-center items-center h-[40px] w-[40px] border-2 border-gray-500 rounded-md cursor-pointer"
+              onClick={() => setIsOpen(false)}
+            >
+              <HiOutlineX className="h-6 w-6 text-white" />
+            </div>
+          )}
         </div>
 
+        {/* Chat History */}
+        {isOpen && (
+          <div className="h-full flex flex-col gap-1 overflow-auto">
+            {history.map((item) => (
+              <Link
+                key={item.sessionId}
+                to={`/chat/${item.sessionId}`}
+                className="text-white p-2 border border-gray-500 w-full block rounded-md hover:bg-gray-500"
+              >
+                {item.chat.message}
+              </Link>
+            ))}
+          </div>
+        )}
+
         <hr className="hidden md:block left-0 w-full h-0.5 bg-gray-500" />
+
         {/* LEFT-BOTTOM */}
         <div className="w-full text-white md:mt-0 flex flex-col gap-4">
           {/* Upgrade Section */}
-          <div className="w-full flex items-center justify-between text-white lg:text-lg text-sm font-semibold cursor-pointer rounded-md py-2 hover:bg-gray-700">
-            <div className="flex items-center gap-2 lg:gap-4">
+          {isOpen && (
+            <div className="w-full flex items-center justify-between text-white lg:text-lg text-sm font-semibold cursor-pointer rounded-md py-2 hover:bg-gray-700">
+              <div className="flex items-center gap-2 lg:gap-4">
+                <img
+                  className="h-[35px] w-[35px] lg:h-[50px] lg:w-[50px]"
+                  src={iconUser}
+                  alt="iconUser"
+                />
+                <span>Upgrade to Plus</span>
+              </div>
+
               <img
-                className="h-[35px] w-[35px] lg:h-[50px] lg:w-[50px]"
-                src={iconUser}
-                alt="iconUser"
+                className="h-[20px] w-[40px] md:h-[27px] md:w-[47px] mr-[5px]"
+                src={newBadge}
+                alt="newBadge"
               />
-              <span>Upgrade to Plus</span>
             </div>
+          )}
 
-            <img
-              className="h-[20px] w-[40px] md:h-[27px] md:w-[47px] mr-[5px]"
-              src={newBadge}
-              alt="newBadge"
-            />
-          </div>
-
-          {/* Profile Section */}
+          {/* Profile Section (Always Visible) */}
           <div className="flex items-center justify-between w-full cursor-pointer rounded-md hover:bg-gray-700">
             <div className="flex items-center gap-4">
               <div className="h-[35px] w-[35px] lg:h-[50px] lg:w-[50px] rounded-full border border-gray-500 bg-gray-700 flex items-center justify-center text-white text-lg font-bold">
@@ -107,16 +121,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, updateHistory }) =
                   : "G"}
               </div>
 
-              <span className="lg:text-lg text-sm text-white font-semibold">
-                {user?.first_name && user?.last_name
-                  ? `${user.first_name} ${user.last_name}`
-                  : "Guest User"}
-              </span>
+              {/* Show name only when sidebar is open */}
+              {isOpen && (
+                <span className="lg:text-lg text-sm text-white font-semibold">
+                  {user?.first_name && user?.last_name
+                    ? `${user.first_name} ${user.last_name}`
+                    : "Guest User"}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center justify-center text-white text-2xl lg:text-4xl font-bold mr-[5px]">
-              ...
-            </div>
+            {/* Options button visible only when open */}
+            {isOpen && (
+              <div className="flex items-center justify-center text-white text-2xl lg:text-4xl font-bold mr-[5px]">
+                ...
+              </div>
+            )}
           </div>
         </div>
       </div>
