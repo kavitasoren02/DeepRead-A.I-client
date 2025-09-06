@@ -57,7 +57,7 @@ const ChatInput = ({ onSendMessage, updateHistory, setUpdateHistory }: ChatInput
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           className="h-[45px] lg:h-[55px] w-full px-4 pr-12 rounded-2xl border-2 border-[#ACACB1] shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-200 text-[#635e5e]"
           type="text"
-          placeholder="Send a message"
+          placeholder="Ask anything..."
         />
 
         {/* Send Button */}
