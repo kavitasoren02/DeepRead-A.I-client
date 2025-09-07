@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { _get } from "../../Service/ApiService";
 import type { GroupedHistoryResponse } from "../../Service/interface";
 import { GROUPED_HOSTORY } from "../../Service/useApiService";
+import { ClipboardPenLine } from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -41,77 +42,85 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div
       className={`bg-[#202028] h-full fixed md:relative transition-all duration-300 z-20
         ${isOpen ? "w-[75%] md:w-[35%] lg:w-[25%]" : "w-[100px]"}
-        translate-x-0
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}
     >
       <div className="p-4 h-[calc(100%-12px)] relative flex flex-col justify-between gap-3">
         {/* LEFT-TOP */}
-        <div className="w-full h-[50px] flex flex-row justify-between gap-2 mt-2 mb-[30px]">
-          {/* DeepRead Icon */}
-          <div
-            className={`h-[50px] w-[50px] flex items-center justify-center cursor-pointer relative ${
-              !isOpen ? "group" : ""
-            }`}
-            onClick={() => {
-              resetToInitial();
-              setIsOpen(false);
-            }}
-          >
-            <img
-              src={deepreadIcon}
-              alt="DeepRead"
-              className="h-[30px] w-[30px] lg:h-[50px] lg:w-[50px] hover:scale-105 transition-transform"
-            />
+        <div className="w-full flex flex-col gap-2 mt-2 lg:mb-[60px] relative">
 
-            {/* Sidebar icon on hover (only when closed) */}
-            {!isOpen && (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsOpen(true);
-                }}
-                className="absolute inset-0 flex justify-center items-center border-2 border-gray-500 rounded-md opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800"
-              >
-                <img
-                  src={SideBar}
-                  alt="sidebar"
-                  className="h-[18px] w-[18px] lg:h-[22px] lg:w-[22px]"
-                />
+          {/* DeepRead Icon*/}
+          <div className="lg:h-[50px] lg:w-[50px] flex items-center justify-center cursor-pointer relative md:group hidden md:flex">
+            <div
+              className="relative group flex items-center justify-center"
+              onClick={() => setIsOpen(true)} 
+            >
+              <img
+                src={deepreadIcon}
+                alt="DeepRead"
+                className="h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] hover:scale-105 transition-transform"
+              />
 
-                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+              {/* Tooltip text on hover */}
+              {!isOpen && (
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Open Sidebar
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
-          {/* Sidebar Icon (always on right when open) */}
+          {/* Mobile DeepRead & Close */}
           {isOpen && (
-            <div className="relative group">
-              <div
-                className="hidden md:flex h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] border-2 border-gray-500 justify-center items-center rounded-md cursor-pointer hover:bg-gray-600 transition"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                <img
-                  src={SideBar}
-                  alt="sidebar"
-                  className="h-[18px] w-[18px] lg:h-[22px] lg:w-[22px]"
-                />
-              </div>
-
-              <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Sidebar
-              </div>
+            <div className="md:hidden flex justify-between items-center w-full mb-4">
+              <img
+                src={deepreadIcon}
+                alt="DeepRead"
+                className="h-[40px] w-[40px]"
+                onClick={() => {
+                  resetToInitial();
+                  setIsOpen(false);
+                }}
+              />
+              <HiOutlineX
+                className="h-6 w-6 text-white cursor-pointer"
+                onClick={() => setIsOpen(false)}
+              />
             </div>
           )}
 
-          {/* Close Icon */}
+          {/* Pencil Icon */}
+          <div className="flex items-center mt-4 gap-2 cursor-pointer">
+            <ClipboardPenLine
+              className={`${
+                isOpen ? "lg:h-[50px] lg:w-[50px]" : "lg:w-[50px] lg:h-[50px] "
+              } text-white`}
+            />
+            {isOpen && (
+              <span className="lg:text-xl text-lg text-white font-semibold">
+                New Chat
+              </span>
+            )}
+          </div>
+
+          {/* Sidebar toggle on right */}
           {isOpen && (
-            <div
-              className="md:hidden flex justify-center items-center h-[40px] w-[40px] rounded-md cursor-pointer hover:bg-gray-600 transition"
-              onClick={() => setIsOpen(false)}
-            >
-              <HiOutlineX className="h-6 w-6 text-white" />
+            <div className="absolute top-0 right-0 h-[50px] flex items-center justify-center">
+              <div className="relative group">
+                <div
+                  className="hidden md:flex h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] border-2 border-gray-500 justify-center items-center rounded-md cursor-pointer hover:bg-gray-600 transition"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  <img
+                    src={SideBar}
+                    alt="sidebar"
+                    className="h-[18px] w-[18px] lg:h-[22px] lg:w-[22px]"
+                  />
+                </div>
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Sidebar
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -135,9 +144,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           <hr className="hidden md:block left-0 w-full h-0.5 bg-gray-500" />
         )}
 
-        {/*  LEFT-BOTTOM  */}
+        {/* LEFT-BOTTOM */}
         <div className="w-full text-white md:mt-0 flex flex-col gap-4">
-          {/* Upgrade Section  */}
+          {/* Upgrade Section */}
           <div
             className={`flex items-center w-full cursor-pointer rounded-full py-2 transition-all duration-300 ${
               isOpen ? "justify-between px-2" : "justify-center"
@@ -164,7 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
 
-          {/*  Profile Section  */}
+          {/* Profile Section */}
           <div
             className={`flex items-center w-full cursor-pointer rounded-md ${
               isOpen ? "justify-between px-2" : "justify-center"
