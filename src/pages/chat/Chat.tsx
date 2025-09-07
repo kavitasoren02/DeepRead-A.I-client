@@ -18,6 +18,7 @@ interface ChatMessage {
   userMessage: string;
   botSummary?: string;
   isLoading?: boolean;
+  audioPath?: string;
 }
 
 const Chat = () => {
@@ -43,6 +44,7 @@ const Chat = () => {
             data.map((item) => ({
               userMessage: item.isAIgenerated ? "" : item.message,
               botSummary: item.isAIgenerated ? item.message : "",
+              audioPath: item.audioPath ?? "",
               isLoading: false,
             }))
           );
@@ -59,10 +61,10 @@ const Chat = () => {
     setUpdateHistory(0);
   };
 
-  const handleSendMessage = (userMessage: string, botSummary?: string) => {
+  const handleSendMessage = (userMessage: string, botSummary?: string, audioPath: string = "") => {
     setMessages((prev) => {
       if (!botSummary) {
-        return [...prev, { userMessage, botSummary: "", isLoading: true }];
+        return [...prev, { userMessage, botSummary: "", isLoading: true, audioPath }];
       }
 
       const updated = [...prev];
@@ -73,6 +75,7 @@ const Chat = () => {
           ...updated[lastIndex],
           botSummary,
           isLoading: false,
+          audioPath
         };
       }
 
@@ -125,13 +128,13 @@ const Chat = () => {
             <div className="space-y-4 lg:pt-[20px]">
               {messages.map((msg, index) => (
                 <div key={index} className="flex flex-col gap-2">
-                  {msg.userMessage && <SenderMessage message={msg.userMessage} />}
+                  {msg.userMessage && <SenderMessage message={msg.userMessage} isPlaying={false}/>}
                   {msg.isLoading ? (
                     <div className="flex justify-start items-center gap-2">
                       <Loader />
                     </div>
                   ) : (
-                    msg.botSummary && <ReceiverMessage message={msg.botSummary} />
+                    msg.botSummary && <ReceiverMessage message={msg.botSummary} audioPath={msg.audioPath} isPlaying={index === messages.length - 1} />
                   )}
                 </div>
               ))}

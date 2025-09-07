@@ -2,7 +2,7 @@ import { Bot } from "lucide-react";
 
 const Loader = () => {
   return (
-    <div className="flex items-start gap-2 p-3">
+    <div className="flex items-start gap-4 pt-2">
       {/* Bot Icon */}
       <div className="h-10 w-10 flex items-center justify-center bg-white shadow-md rounded-full">
         <Bot size={28} className="text-blue-500" />
