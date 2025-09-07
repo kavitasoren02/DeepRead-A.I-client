@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <img
                 src={deepreadIcon}
                 alt="DeepRead"
-                className="h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] hover:scale-105 transition-transform"
+                className="h-[40px] w-[40px] hover:scale-105 transition-transform"
               />
 
               {/* Tooltip text on hover */}
@@ -94,7 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <ClipboardPenLine
               onClick={() => navigate("/upload")}
               className={`${
-                isOpen ? "lg:h-[50px] lg:w-[50px]" : "lg:w-[50px] lg:h-[50px] "
+                isOpen ? "lg:h-[40px] lg:w-[40px]" : "lg:w-[40px] lg:h-[40px] "
               } text-white`}
             />
             {isOpen && (
@@ -109,7 +109,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <div className="absolute top-0 right-0 h-[50px] flex items-center justify-center">
               <div className="relative group">
                 <div
-                  className="hidden md:flex h-[40px] w-[40px] lg:h-[50px] lg:w-[50px] border-2 border-gray-500 justify-center items-center rounded-md cursor-pointer hover:bg-gray-600 transition"
+                  className="hidden md:flex h-[40px] w-[40px] border-2 border-gray-500 justify-center items-center rounded-md cursor-pointer hover:bg-gray-600 transition"
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   <img
