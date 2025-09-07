@@ -87,6 +87,8 @@ export interface UploadResponse {
 
 export interface MessageProps {
   message: string;
+  audioPath?: string;
+  isPlaying: boolean;
 }
 
 export interface ChatInputProps {
@@ -137,4 +139,8 @@ export interface ChatHistory {
   isAIgenerated: boolean;
   audioPath?: string;
   timeStamp: string;
+}
+
+export interface AudioResponse extends GroupedHistory {
+
 }
