@@ -25,32 +25,39 @@ const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { id } = useParams();
-  const [updateHistory, setUpdateHistory] = useState<number>(0)
+  const [updateHistory, setUpdateHistory] = useState<number>(0);
 
+  // Scroll to bottom on messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Fetch chat history if id exists
   useEffect(() => {
-    if(id){
+    if (id) {
       (async () => {
-        try{
-          setUpdateHistory(0)
+        try {
+          setUpdateHistory(0);
           const { data } = await _get<ChatHistory[]>(`${GET_HISTORY}/${id}`);
-          setMessages(data.map(item => {
-            return {
-              userMessage: item.isAIgenerated ? '' : item.message,
-              botSummary: item.isAIgenerated ? item.message : '',
-              isLoading: false
-            }
-          }))
-        } 
-        catch (error: any) {
+          setMessages(
+            data.map((item) => ({
+              userMessage: item.isAIgenerated ? "" : item.message,
+              botSummary: item.isAIgenerated ? item.message : "",
+              isLoading: false,
+            }))
+          );
+        } catch (error: any) {
           // do nothing
-        }  
-      })()
+        }
+      })();
     }
-  }, [id])
+  }, [id]);
+
+  // Reset to initial page
+  const resetToInitial = () => {
+    setMessages([]);
+    setUpdateHistory(0);
+  };
 
   const handleSendMessage = (userMessage: string, botSummary?: string) => {
     setMessages((prev) => {
@@ -86,10 +93,11 @@ const Chat = () => {
       )}
 
       {/* Sidebar */}
-      <Sidebar 
-        isOpen={isOpen} 
+      <Sidebar
+        isOpen={isOpen}
         setIsOpen={setIsOpen}
-        updateHistory={updateHistory} 
+        updateHistory={updateHistory}
+        resetToInitial={resetToInitial} // pass function
       />
 
       {/* Main Chat Area */}
@@ -134,10 +142,10 @@ const Chat = () => {
 
         {/* Input Section */}
         <div className="px-4 py-4 flex justify-center">
-          <ChatInput 
+          <ChatInput
             onSendMessage={handleSendMessage}
             updateHistory={updateHistory}
-            setUpdateHistory={setUpdateHistory} 
+            setUpdateHistory={setUpdateHistory}
           />
         </div>
       </div>
