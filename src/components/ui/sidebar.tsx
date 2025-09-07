@@ -3,7 +3,7 @@ import deepreadIcon from "../../assets/deepai.webp";
 import iconUser from "../../assets/Icon_User.svg";
 import newBadge from "../../assets/Badge.svg";
 import { HiOutlineX } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../ProtectedRoute/AuthProvider";
 import { useEffect, useState } from "react";
 import { _get } from "../../Service/ApiService";
@@ -26,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user } = useAuth();
   const [history, setHistory] = useState<GroupedHistoryResponse[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -48,12 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-4 h-[calc(100%-12px)] relative flex flex-col justify-between gap-3">
         {/* LEFT-TOP */}
         <div className="w-full flex flex-col gap-2 mt-2 lg:mb-[60px] relative">
-
           {/* DeepRead Icon*/}
           <div className="lg:h-[50px] lg:w-[50px] flex items-center justify-center cursor-pointer relative md:group hidden md:flex">
             <div
               className="relative group flex items-center justify-center"
-              onClick={() => setIsOpen(true)} 
+              onClick={() => setIsOpen(true)}
             >
               <img
                 src={deepreadIcon}
@@ -92,6 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* Pencil Icon */}
           <div className="flex items-center mt-4 gap-2 cursor-pointer">
             <ClipboardPenLine
+              onClick={() => navigate("/upload")}
               className={`${
                 isOpen ? "lg:h-[50px] lg:w-[50px]" : "lg:w-[50px] lg:h-[50px] "
               } text-white`}
