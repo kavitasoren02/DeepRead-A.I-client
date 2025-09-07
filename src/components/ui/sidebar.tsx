@@ -98,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               } text-white`}
             />
             {isOpen && (
-              <span className="lg:text-xl text-lg text-white font-semibold">
+              <span className=" text-lg text-white font-semibold">
                 New Chat
               </span>
             )}
