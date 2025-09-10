@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { string } from "yup";
 
 export interface User {
   _id: string;
@@ -141,6 +142,18 @@ export interface ChatHistory {
   timeStamp: string;
 }
 
-export interface AudioResponse extends GroupedHistory {
+export interface ContactProps {
+  name: string;
+  email: string;
+  message: string;
+}
 
+export const contactProps: ContactProps = {
+  name: "",
+  email: "",
+  message: "",
+};
+
+export interface contactResponse {
+  message: string
 }

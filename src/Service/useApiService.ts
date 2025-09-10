@@ -14,3 +14,6 @@ export const GET_HISTORY = '/api/chat'
 // Audio Chat
 export const AUDIO_CHAT = '/api/audio_summary'
 export const AUDIO_PATH = `${settings.BACKEND_URL}api/audio_files`
+
+// Contact 
+export const CONTACT = "/api/send/message"

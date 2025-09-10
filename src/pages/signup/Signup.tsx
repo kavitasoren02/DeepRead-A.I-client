@@ -182,8 +182,7 @@ const RegistrationForm: React.FC = () => {
   px-4
   py-3
   text-white
-  bg-[#128455]
-  border
+bg-gradient-to-r from-green-600 to-green-800  border
   border-[#ACACB1]
   focus:outline-none
   focus:border-black

@@ -71,7 +71,7 @@ const handleContinue = async () => {
   const ContinueButton = () => (
     <button
       onClick={handleContinue}
-      className="bg-[#128455] text-white font-medium lg:font-semibold w-[200px] lg:w-[352px] h-[52px] flex justify-between items-center shadow-lg cursor-pointer rounded-lg"
+      className="bg-gradient-to-r from-green-600 to-green-800 text-white font-medium lg:font-semibold w-[200px] lg:w-[352px] h-[52px] flex justify-between items-center shadow-lg cursor-pointer rounded-lg"
     >
       <span className="text-lg ml-4">Continue</span>
       <span className="lg:text-[3rem] text-[2rem] leading-none lg:mr-4 mr-2">→</span>
