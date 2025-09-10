@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ReactTyped } from "react-typed";
-import { FiUploadCloud } from "react-icons/fi";
-import { AiOutlineRobot, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { FiUploadCloud, FiAlignRight } from "react-icons/fi";
+import { AiOutlineRobot,AiOutlineCloseSquare } from "react-icons/ai";
 import { LuFileClock } from "react-icons/lu";
 import deepreadAI from "../../assets/deepai.webp";
 import Contact from "../contact/Contact";
@@ -51,9 +51,10 @@ const Home: React.FC = () => {
         <div className="md:hidden flex items-center">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? (
-              <AiOutlineClose className="text-3xl text-green-600" />
+              <AiOutlineCloseSquare className="text-3xl text-green-600" />
             ) : (
-              <AiOutlineMenu className="text-3xl text-green-600" />
+              
+              <FiAlignRight className="text-3xl text-green-600" />
             )}
           </button>
         </div>
