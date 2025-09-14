@@ -5,11 +5,13 @@ import newBadge from "../../assets/Badge.svg";
 import { HiOutlineX } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../ProtectedRoute/AuthProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { _get } from "../../Service/ApiService";
 import type { GroupedHistoryResponse } from "../../Service/interface";
 import { GROUPED_HOSTORY } from "../../Service/useApiService";
 import { ClipboardPenLine } from "lucide-react";
+import { AiOutlineEllipsis } from "react-icons/ai";
+import { LuLogOut } from "react-icons/lu";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -25,7 +27,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   resetToInitial,
 }) => {
   const { user } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [history, setHistory] = useState<GroupedHistoryResponse[]>([]);
+  const {handleLogout} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +43,19 @@ const Sidebar: React.FC<SidebarProps> = ({
       }
     })();
   }, [updateHistory]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <div
@@ -104,7 +122,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
 
-          {/* Sidebar toggle on right */}
+          {/* Sidebar */}
           {isOpen && (
             <div className="absolute top-0 right-0 h-[50px] flex items-center justify-center">
               <div className="relative group">
@@ -179,6 +197,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             className={`flex items-center w-full cursor-pointer rounded-md ${
               isOpen ? "justify-between px-2" : "justify-center"
             }`}
+            ref={menuRef}
           >
             <div className="flex items-center gap-4">
               <div className="h-[50px] w-[50px] rounded-full border-2 border-gray-500 bg-gray-700 flex items-center justify-center text-white text-lg font-bold">
@@ -197,8 +216,35 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             {isOpen && (
-              <div className="flex items-center justify-center text-white text-2xl lg:text-4xl font-bold mr-[5px]">
+              <AiOutlineEllipsis
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex items-center justify-center text-white text-2xl lg:text-4xl font-bold mr-[5px]"
+              >
                 ...
+              </AiOutlineEllipsis>
+            )}
+
+            {isMenuOpen && (
+              <div
+                className={`absolute bottom-20 right-0 bg-white text-gray-900 rounded-xl shadow-xl border p-4 z-50 
+                ${isOpen ? "w-full" : "w-[200px]"}`}
+              >
+                <div className="mb-3">
+                  <p className="font-semibold text-lg">
+                    {user?.first_name && user?.last_name
+                      ? `${user.first_name} ${user.last_name}`
+                      : "Guest User"}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    {user?.email || "guest@example.com"}
+                  </p>
+                </div>
+                <button
+                onClick={handleLogout}
+                className="w-full px-4 py-2 text-white rounded-lg bg-[#202028] flex items-center gap-2 transition">
+                  <LuLogOut className="text-lg" />
+                  Logout
+                </button>
               </div>
             )}
           </div>

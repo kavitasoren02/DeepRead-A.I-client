@@ -41,8 +41,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogin = async (payload: LoginRequest) => {
     try {
       setLoadingAuth(true);
-      await _post<LoginResponse>(LOGIN, payload);
-      navigate("/dashboard");
+      const response = await _post<LoginResponse>(LOGIN, payload);
+      await fetchUser();
+      return response;
     } catch (error) {
       console.error("Failed to Login", error);
     } finally {

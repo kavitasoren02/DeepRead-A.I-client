@@ -40,14 +40,14 @@ const Contact = () => {
      className="bg-white py-20 px-5">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="lg:text-5xl text-3xl font-semibold text-gray-800">
+          <h2 className="lg:text-5xl text-3xl font-bold text-gray-900 mb-4">
             <ReactTyped
               strings={["Contact Us"]}
               typeSpeed={70}
               backSpeed={50}
               loop
             />
-          </h1>
+          </h2>
           <p className="text-gray-600 lg:text-2xl text-xl mt-4 font-medium">
             We'd love to hear from you! Fill out the form below to get in touch.
           </p>
@@ -103,7 +103,7 @@ const Contact = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className=" cursor-pointer bg-gradient-to-r from-green-600 to-green-800 text-white py-3 px-10 rounded-full font-semibold text-lg shadow-lg hover:scale-105 transition-transform duration-300"
+              className=" cursor-pointer bg-gradient-to-r from-green-600 to-green-800 text-white py-3 px-10 rounded-full font-semibold text-lg shadow-lg hover:scale-105 transition-transform duration-300 "
             >
               {loading ? "Sending..." : "Send Message"}
             </button>

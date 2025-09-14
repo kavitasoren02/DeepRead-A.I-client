@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import type { LoginResponse } from "../../Service/interface";
-import { LOGIN } from "../../Service/useApiService";
 import { _post } from "../../Service/ApiService";
 import { toast } from "react-toastify";
 import deepreadAI from "../../assets/deepai.webp";
 import Input from "../../components/ui/Input";
 import googleIcon from "../../assets/Icon_Google.svg";
+import { useAuth } from "../../ProtectedRoute/AuthProvider";
 
 const Login: React.FC = () => {
   const [loading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { handleLogin } = useAuth();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -33,9 +33,9 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const { data } = await _post<LoginResponse>(LOGIN, values);
-        toast.success(data.msg);
-        navigate("/upload");
+      const {data} = await handleLogin(values);
+      toast.success(data.msg || "Login successfull");
+      navigate("/upload");
       } catch (error: any) {
         toast.error(error?.response?.data?.message || "Login failed");
       } finally {

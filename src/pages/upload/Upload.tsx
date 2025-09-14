@@ -10,7 +10,7 @@ import { UPLOADFILE } from "../../Service/useApiService";
 const Upload: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileURL, setFileURL] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [_, setLoading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 

@@ -4,8 +4,9 @@ import Home from "./pages/home/home";
 import RegistrationForm from "./pages/signup/Signup";
 import LoginForm from "./pages/login/Login";
 import UploadFile from "./pages/upload/Upload";
-import ChatScreen from './pages/chat/Chat';
+import ChatScreen from "./pages/chat/Chat";
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoutes from "./ProtectedRoute/ProtectedRoute";
 
 function App() {
   return (
@@ -27,8 +28,22 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/upload" element={<UploadFile/>} />
-        <Route path="/chat/:id" element={<ChatScreen/>} />
+        <Route
+          path="/upload"
+          element={
+            <ProtectedRoutes>
+              <UploadFile />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/chat/:id"
+          element={
+            <ProtectedRoutes>
+              <ChatScreen />
+            </ProtectedRoutes>
+          }
+        />
       </Routes>
     </>
   );

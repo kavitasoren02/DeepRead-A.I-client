@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { string } from "yup";
 
 export interface User {
   _id: string;
@@ -131,6 +130,10 @@ export interface GroupedHistory {
 export interface GroupedHistoryResponse {
   chat: GroupedHistory;
   sessionId: string;
+}
+
+export interface AudioResponse extends GroupedHistory {
+
 }
 
 export interface ChatHistory {

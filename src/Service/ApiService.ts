@@ -1,5 +1,7 @@
 import axios, { AxiosError, type AxiosResponse , type AxiosRequestConfig} from "axios";
 import { settings } from "../config/config";
+import { GETUSERINFO, LOGIN } from "./useApiService";
+
 
 const axiosInstance = axios.create({
   baseURL: settings.BACKEND_URL,
@@ -24,7 +26,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const excludeRoute: string[] = ["api/auth/info"];
+    const excludeRoute: string[] = [GETUSERINFO,LOGIN];
 
     const REDIRECT_STATUS_CODES = [401, 403, 429];
 
