@@ -65,7 +65,7 @@ const RegistrationForm: React.FC = () => {
         const { confirmPassword, ...payload } = values;
         const { data } = await _post<RegisterResponse>(REGISTER, payload);
         toast.success(data.msg);
-        navigate("api/auth/login");
+        navigate("/login");
       } catch (error: any) {
         setLoading(false);
         toast.error(error.response?.data?.message || "Something went wrong");
@@ -198,7 +198,7 @@ bg-gradient-to-r from-green-600 to-green-800  border
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-        <div className="lg:mt-[10px] p-[25px]">
+        <div className="p-[15px]">
           <p className=" w-full flex justify-center text-black">
             Already have an account? &nbsp; &nbsp;
             <Link
@@ -227,6 +227,15 @@ bg-gradient-to-r from-green-600 to-green-800  border
               Continue with Google
             </p>
           </div>
+          <p className=" w-full flex justify-center text-black lg:mt-[20px]">
+            <Link
+              className=" text-[#128455]
+              cursor-pointer"
+              to="/"
+            >
+              Back to Home
+            </Link>
+          </p>
         </div>
       </div>
     </div>

@@ -33,9 +33,9 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-      const {data} = await handleLogin(values);
-      toast.success(data.msg || "Login successfull");
-      navigate("/upload");
+        const { data } = await handleLogin(values);
+        toast.success(data.msg || "Login successfull");
+        navigate("/upload");
       } catch (error: any) {
         toast.error(error?.response?.data?.message || "Login failed");
       } finally {
@@ -137,6 +137,15 @@ bg-gradient-to-r from-green-600 to-green-800  border
               Continue with Google
             </p>
           </div>
+          <p className=" w-full flex justify-center text-black lg:mt-[20px]">
+            <Link
+              className=" text-[#128455]
+                        cursor-pointer"
+              to="/"
+            >
+              Back to Home
+            </Link>
+          </p>
         </div>
       </div>
     </div>
