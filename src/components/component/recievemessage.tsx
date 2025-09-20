@@ -26,7 +26,7 @@ const ReceiverMessage = ({ message, audioPath, isPlaying: isAudioPlaying }: Mess
   }, [isAudioPlaying])
 
   return (
-    <div className="w-full flex items-start gap-3 py-[20px]">
+    <div className="w-full flex items-start gap-3">
       <div className="h-10 w-10 overflow-hidden borde flex-shrink-0">
         <Bot size={40} className="text-blue-500 shadow-lg" />
       </div>
