@@ -6,14 +6,17 @@ import { AiOutlineRobot, AiOutlineCloseSquare } from "react-icons/ai";
 import { LuFileClock } from "react-icons/lu";
 import deepreadAI from "../../assets/deepai.webp";
 import Contact from "../contact/Contact";
+import DemoVideo from "../../components/component/DemoVideo";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [showVideo, setShowVideo] = useState<boolean>(false)
 
   return (
     <div className="font-sans">
+      {showVideo && <DemoVideo setShowVideo={setShowVideo} />}
       {/* Navbar */}
-      <nav className="w-screen h-[70px] backdrop-blur-md bg-white/60 border-b border-gray-200 shadow-md flex items-center justify-between lg:px-12 px-4 sticky top-0 z-50 transition-all">
+      <nav className="w-full h-[70px] backdrop-blur-md bg-white/60 border-b border-gray-200 shadow-md flex items-center justify-between lg:px-12 px-4 sticky top-0 z-50 transition-all">
         {/* Logo */}
         <div className="flex items-center gap-3 cursor-pointer group">
           <img
@@ -111,11 +114,11 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section
         id="home"
-        className="w-screen h-[calc(100vh-70px)] bg-gradient-to-br from-green-50 via-white to-gray-100 flex justify-center items-center text-center px-5"
+        className="w-full h-[calc(100vh-70px)] bg-gradient-to-br from-green-50 via-white to-gray-100 flex justify-center items-center text-center px-5"
       >
         <div className="max-w-3xl">
           <h1 className="lg:text-[70px] text-[36px] font-extrabold text-gray-900 leading-tight mb-6">
-            <ReactTyped
+            {!showVideo && <ReactTyped
               strings={[
                 "Transform Your PDFs into",
                 "Interactive Conversations",
@@ -124,7 +127,7 @@ const Home: React.FC = () => {
               typeSpeed={60}
               backSpeed={40}
               loop
-            />
+            />}
           </h1>
           <p className="text-gray-600 lg:text-2xl text-lg mb-10 font-medium">
             Upload any PDF document and ask questions about its content. <br />
@@ -137,7 +140,10 @@ const Home: React.FC = () => {
                 Get Started Free
               </button>
             </Link>
-            <button className="lg:px-10 px-6 lg:py-5 py-3 border-2 border-green-700 text-green-700 rounded-full font-bold hover:bg-green-700 hover:text-white transition-all duration-300 cursor-pointer">
+            <button 
+              className="lg:px-10 px-6 lg:py-5 py-3 border-2 border-green-700 text-green-700 rounded-full font-bold hover:bg-green-700 hover:text-white transition-all duration-300 cursor-pointer"
+              onClick={() => setShowVideo(true)}
+            >
               Watch Demo
             </button>
           </div>
