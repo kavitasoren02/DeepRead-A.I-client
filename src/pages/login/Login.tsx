@@ -37,7 +37,7 @@ const Login: React.FC = () => {
         toast.success(data.msg || "Login successfull");
         navigate("/upload");
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Login failed");
+        toast.error(error?.response?.data?.detail || "Login failed");
       } finally {
         setIsLoading(false);
       }

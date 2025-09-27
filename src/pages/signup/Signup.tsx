@@ -68,7 +68,7 @@ const RegistrationForm: React.FC = () => {
         navigate("/login");
       } catch (error: any) {
         setLoading(false);
-        toast.error(error.response?.data?.message || "Something went wrong");
+        toast.error(error.response?.data?.detail|| "Something went wrong");
       } finally {
         setLoading(false);
         actions.setSubmitting(false);
